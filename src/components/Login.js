@@ -1,16 +1,20 @@
 import React, { useRef, useState } from "react";
 import Header from "./Layout/Header";
+<<<<<<< HEAD
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../utils/firebase.js";
+=======
+>>>>>>> 126803a314fe37129596f6287a2e3e9bae0e1154
 
 import { validateData } from "../utils/validate";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
 
+<<<<<<< HEAD
   const [errorMessage, setErrorMessage] = useState(null);
 
   const email = useRef(null);
@@ -65,6 +69,26 @@ const Login = () => {
   const handleToggleClick = () => {
     setIsSignIn(!isSignIn); //for toggle the state
     console.log(email);
+=======
+  const [errorMessage,setErrorMessage] = useState(null);
+
+  const email = useRef(null);
+  const password = useRef(null);  //reference to those input boxes..
+
+  const handleSubmit =()=>{
+     console.log(email);     //this is an object contains current.value field
+     const message = validateData(email.current.value, password.current.value);
+
+     setErrorMessage(message);
+
+
+  }
+
+  const handleToggleClick = () => {
+    setIsSignIn(!isSignIn);   //for toggle the state 
+    console.log(email);
+    
+>>>>>>> 126803a314fe37129596f6287a2e3e9bae0e1154
   };
   return (
     <div className="">
@@ -102,6 +126,7 @@ const Login = () => {
           placeholder="Enter your password"
         />
         {errorMessage && <p className="text-red-500 ">{errorMessage}</p>}
+<<<<<<< HEAD
         <button
           onClick={handleSubmit}
           className="text-white bg-red-500 w-full py-2 my-2 "
@@ -109,6 +134,12 @@ const Login = () => {
           {isSignIn ? "Sign In" : "Sign Up"}
         </button>
         <p className="cursor-pointer my-4 p-2" onClick={handleToggleClick}>
+=======
+        <button onClick ={handleSubmit} className="text-white bg-red-500 w-full py-2 my-2 ">
+          {isSignIn ? "Sign In" : "Sign Up"}
+        </button>
+        <p className="cursor-pointer my-4 p-2" onClick={handleSubmitClick}>
+>>>>>>> 126803a314fe37129596f6287a2e3e9bae0e1154
           {isSignIn ? "New to netflix? Sign up" : "Already registered?Sign In"}
         </p>
       </form>
