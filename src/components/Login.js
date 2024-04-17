@@ -1,29 +1,70 @@
 import React, { useRef, useState } from "react";
 import Header from "./Layout/Header";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase.js";
 
 import { validateData } from "../utils/validate";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
 
-  const [errorMessage,setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const email = useRef(null);
-  const password = useRef(null);  //reference to those input boxes..
+  const password = useRef(null); //reference to those input boxes..
 
-  const handleSubmit =()=>{
-     console.log(email);     //this is an object contains current.value field
-     const message = validateData(email.current.value, password.current.value);
+  const handleSubmit = () => {
+    console.log(email); //this is an object contains current.value field
+    const message = validateData(email.current.value, password.current.value);
+    setErrorMessage(message);
+    if (message) return;
+    if (!isSignIn) {
+      //sign up logic read firebase authentication docs
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorMessage + "-" + errorCode);
+          // ..
+        });
+    } else {
+      //sign in logic
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
 
-     setErrorMessage(message);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorMessage + "-" + errorCode);
+        });
+    }
+  };
 
-
-  }
-
-  const handleSubmitClick = () => {
-    setIsSignIn(!isSignIn);   //for toggle the state 
+  const handleToggleClick = () => {
+    setIsSignIn(!isSignIn); //for toggle the state
     console.log(email);
-    
   };
   return (
     <div className="">
@@ -61,10 +102,13 @@ const Login = () => {
           placeholder="Enter your password"
         />
         {errorMessage && <p className="text-red-500 ">{errorMessage}</p>}
-        <button onClick ={handleSubmit} className="text-white bg-red-500 w-full py-2 my-2 ">
+        <button
+          onClick={handleSubmit}
+          className="text-white bg-red-500 w-full py-2 my-2 "
+        >
           {isSignIn ? "Sign In" : "Sign Up"}
         </button>
-        <p className="cursor-pointer my-4 p-2" onClick={handleSubmitClick}>
+        <p className="cursor-pointer my-4 p-2" onClick={handleToggleClick}>
           {isSignIn ? "New to netflix? Sign up" : "Already registered?Sign In"}
         </p>
       </form>

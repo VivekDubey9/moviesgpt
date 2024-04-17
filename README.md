@@ -4,7 +4,12 @@
 2.configured tailwind css
 -sign in page done
 -sign up page done
--form validation on progress
+-form validation done via regex
+
+- firebase setup done
+- firebase deploy done
+-create signup user acc in firebase
+-firebase signup/signin done successfully
 
 
 # features to be build
