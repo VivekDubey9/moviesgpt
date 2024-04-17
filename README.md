@@ -1,3 +1,32 @@
+# Steps followed till now!
+
+1.create-react-app
+2.configured tailwind css
+-sign in page done
+-sign up page done
+-form validation on progress
+
+
+# features to be build
+
+    1.Logo + sign in button
+       sign in/up page
+       redirect to browse page
+
+
+    2.Browse (for logged in users )
+        a.header +navbar
+        b. movie section.
+            trailor
+            name,description
+            play button more info button
+        c. movie suggestions section
+            movieLists*N
+
+    3.cineGPT
+       search bar
+       movie Suggestions..
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
