@@ -1,30 +1,33 @@
 import React, { useRef, useState } from "react";
 import Header from "./Layout/Header";
-<<<<<<< HEAD
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase.js";
-=======
->>>>>>> 126803a314fe37129596f6287a2e3e9bae0e1154
 
 import { validateData } from "../utils/validate";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice.js";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-<<<<<<< HEAD
   const [errorMessage, setErrorMessage] = useState(null);
-
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null); //reference to those input boxes..
 
   const handleSubmit = () => {
-    console.log(email); //this is an object contains current.value field
+    // console.log(email); //this is an object contains current.value field
     const message = validateData(email.current.value, password.current.value);
     setErrorMessage(message);
     if (message) return;
+
     if (!isSignIn) {
       //sign up logic read firebase authentication docs
       createUserWithEmailAndPassword(
@@ -35,13 +38,32 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
+
           console.log(user);
+          //update user profile via firebase
+          updateProfile(auth.currentUser, {
+            displayName: name.current.value,
+            photoURL:
+              "https://m.media-amazon.com/images/I/41PMRimCXqL._SR600%2C315_PIWhiteStrip%2CBottomLeft%2C0%2C35_SCLZZZZZZZ_FMpng_BG255%2C255%2C255.jpg",
+          })
+            .then(() => {
+              // Profile updated!
+              const {uid,email,displayName,photoURL} = auth.currentUser;
+              dispatch(addUser({uid:uid,email:email,displayName:displayName,photoURL:photoURL}));
+              navigate("/browse");
+
+              // ...
+            })
+            .catch((error) => {
+              // An error occurred
+              // ...
+            });
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorMessage + "-" + errorCode);
+          setErrorMessage(errorMessage + "=>" + errorCode);
           // ..
         });
     } else {
@@ -55,13 +77,15 @@ const Login = () => {
           // Signed in
           const user = userCredential.user;
           console.log(user);
+          navigate("/browse");
+
 
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorMessage + "-" + errorCode);
+          setErrorMessage(errorMessage + ":)" + errorCode);
         });
     }
   };
@@ -69,26 +93,6 @@ const Login = () => {
   const handleToggleClick = () => {
     setIsSignIn(!isSignIn); //for toggle the state
     console.log(email);
-=======
-  const [errorMessage,setErrorMessage] = useState(null);
-
-  const email = useRef(null);
-  const password = useRef(null);  //reference to those input boxes..
-
-  const handleSubmit =()=>{
-     console.log(email);     //this is an object contains current.value field
-     const message = validateData(email.current.value, password.current.value);
-
-     setErrorMessage(message);
-
-
-  }
-
-  const handleToggleClick = () => {
-    setIsSignIn(!isSignIn);   //for toggle the state 
-    console.log(email);
-    
->>>>>>> 126803a314fe37129596f6287a2e3e9bae0e1154
   };
   return (
     <div className="">
@@ -108,6 +112,7 @@ const Login = () => {
         </h1>
         {!isSignIn && (
           <input
+            ref={name}
             className="p-2 my-2 bg-gray-700 w-full "
             type="text"
             placeholder="enter your Name"
@@ -126,7 +131,6 @@ const Login = () => {
           placeholder="Enter your password"
         />
         {errorMessage && <p className="text-red-500 ">{errorMessage}</p>}
-<<<<<<< HEAD
         <button
           onClick={handleSubmit}
           className="text-white bg-red-500 w-full py-2 my-2 "
@@ -134,12 +138,6 @@ const Login = () => {
           {isSignIn ? "Sign In" : "Sign Up"}
         </button>
         <p className="cursor-pointer my-4 p-2" onClick={handleToggleClick}>
-=======
-        <button onClick ={handleSubmit} className="text-white bg-red-500 w-full py-2 my-2 ">
-          {isSignIn ? "Sign In" : "Sign Up"}
-        </button>
-        <p className="cursor-pointer my-4 p-2" onClick={handleSubmitClick}>
->>>>>>> 126803a314fe37129596f6287a2e3e9bae0e1154
           {isSignIn ? "New to netflix? Sign up" : "Already registered?Sign In"}
         </p>
       </form>
